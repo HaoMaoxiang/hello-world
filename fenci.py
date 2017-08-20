@@ -1,0 +1,37 @@
+##!/usr/bin/env python
+## coding=utf-8
+import jieba
+import sys
+
+filePath='wiki_zh_jian.txt'
+fileSegWordDonePath ='wiki.zh.text.jian.seg'
+# read the file by line
+fileTrainRead = []
+#fileTestRead = []
+with open(filePath) as fileTrainRaw:
+    for line in fileTrainRaw:
+        fileTrainRead.append(unicode(line).encode('utf-8'))
+
+
+# define this function to print a list with Chinese
+def PrintListChinese(list):
+    for i in range(len(list)):
+        print list[i],
+# segment word with jieba
+fileTrainSeg=[]
+for i in range(len(fileTrainRead)):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    fileTrainSeg.append([' '.join(list(jieba.cut(fileTrainRead[i][9:-11],cut_all=False)))])
+    if i % 100 == 0 :
+        print i
+        PrintListChinese(fileTrainSeg[i])
+
+# to test the segment result
+PrintListChinese(fileTrainSeg[10])
+
+# save the result
+with open(fileSegWordDonePath,'wb') as fW:
+    for i in range(len(fileTrainSeg)):
+        fW.write(fileTrainSeg[i][0].encode('utf-8'))
+        fW.write('\n')
